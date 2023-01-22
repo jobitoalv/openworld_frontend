@@ -5,22 +5,28 @@ import { Link, Route, Routes } from 'react-router-dom';
 
 import { Sidebar, UserProfile } from '../components';
 import Pins from './Pins';
+import { userQuery } from '../utils/data';
 import { client } from '../cilent';
 import logo from '../assets/logo.png';
  
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
-
-  const userIfo = localStorage.getItem('user') !== 'underfined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
+  const [user, setUser] = useState(null);
+  const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
   useEffect(()=> {
-    
+    const query = userQuery(userInfo?.googleId)
+
+    client.fetch(query)
+    .then((data)=> {
+      setUser(data[0])
+    })
   },[])
   return (
     <div className='flex bg-gray-50 md:flex-row flex-col h-screen transcation-height duration-75 ease-out '>
       <div className='hidden md:flex h-screen flex-initial'>
-       <Sidebar/>
+       <Sidebar  user={user && user} closeToggle={setToggleSidebar}/>
     </div>
     <div className='flex md:hidden flex-row'>
       <button className='cursor pointer' onClick={() => setToggleSidebar(false)}>
@@ -28,10 +34,19 @@ const Home = () => {
         <img src={logo} alt='logo' className='w-28'/>
       </Link>
       <Link to={`user-profile/${user?.id}`}>
-        <img src={logo} alt='logo' className='w-28'/>
+        <img src={user?.image} alt='logo' className='w-28'/>
       </Link>
       </button>
     </div>
+    {toggleSidebar && (
+      <div className='fixed w-4/5 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in '>
+        <div className='absolute w-full flex justify-end items-center p-2'>
+
+        </div>
+        <Sidebar user={user && user} closeToggle={setToggleSidebar} />
+      </div>
+    )}
+    <div className='pb-2 flex-1 h-screen overflow-y-scroll' ref={scrollRef}></div>
     </div>
   )
 }
