@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-// import { RiHomeFill } from 'react-icons/ri';
-// import { IoIosArrowForward } from 'react-icons/io';
+import { RiHomeFill } from 'react-icons/ri';
+import { IoIosArrowForward } from 'react-icons/io';
 import logo from '../assets/logo.png';
 import { categories } from '../utils/data';
 
@@ -30,7 +30,7 @@ const Sidebar = ({ closeToggle, user }) => {
             className={({ isActive }) => (isActive ? isActiveStyle : isNotActiveStyle)}
             onClick={handleCloseSidebar}
           >
-            <button />
+            <RiHomeFill />
             Home
           </NavLink>
           <h3 className="mt-2 px-5 text-base 2xl:text-xl">Discover cateogries</h3>
@@ -55,7 +55,7 @@ const Sidebar = ({ closeToggle, user }) => {
         >
           <img src={user.image} className="w-10 h-10 rounded-full" alt="user-profile" />
           <p>{user.userName}</p>
-          <button />
+          <IoIosArrowForward />
         </Link>
       )}
     </div>
